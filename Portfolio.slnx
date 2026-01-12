@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/SolutionItems/">
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="Portfolio.Api/Portfolio.Api.csproj" />
+    <Project Path="Portfolio.AppHost/Portfolio.AppHost.csproj" />
+    <Project Path="Portfolio.Application/Portfolio.Application.csproj" />
+    <Project Path="Portfolio.Domain/Portfolio.Domain.csproj" />
+    <Project Path="Portfolio.Infrastructure/Portfolio.Infrastructure.csproj" />
+    <Project Path="Portfolio.ServiceDefaults/Portfolio.ServiceDefaults.csproj" />
+  </Folder>
+</Solution>
