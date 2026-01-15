@@ -1,6 +1,9 @@
 <Solution>
   <Folder Name="/SolutionItems/">
+    <File Path="Directory.Build.props" />
     <File Path="Directory.Packages.props" />
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
   </Folder>
   <Folder Name="/src/">
     <Project Path="Portfolio.Api/Portfolio.Api.csproj" />
