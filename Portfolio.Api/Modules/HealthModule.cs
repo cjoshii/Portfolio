@@ -15,6 +15,5 @@ public class HealthModule : ICarterModule
 
         group.MapGet("/ready", () => Results.Ok(new { status = "ready" }))
              .WithName("ReadinessCheck");
-
     }
 }

@@ -1,6 +1,8 @@
 using Carter;
-using Microsoft.AspNetCore.Http.Metadata;
 using Serilog;
+using Portfolio.Infrastructure.Data;
+using Scalar.AspNetCore;
+using Portfolio.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,35 +13,15 @@ builder.Services.AddSerilog((services, loggerConfiguration) =>
     loggerConfiguration.ReadFrom.Configuration(builder.Configuration);
 });
 
-//builder.AddNpgsqlDbContext<PortfolioDbContext>("portfolio");
+builder.AddNpgsqlDbContext<PortfolioDbContext>("portfolio-db");
+
+builder.Services.AddApplication();
 
 builder.Services.AddCarter();
 
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddSwaggerGen(options =>
-{
-    options.TagActionsBy(api =>
-    {
-        // 1) Prefer WithTags(...) metadata from minimal APIs
-        var tags = api.ActionDescriptor.EndpointMetadata
-            .OfType<ITagsMetadata>()
-            .SelectMany(t => t.Tags)
-            .Distinct()
-            .ToArray();
-
-        if (tags.Length > 0)
-            return tags;
-
-        // 2) Next best: GroupName if you used WithGroupName(...)
-        if (!string.IsNullOrWhiteSpace(api.GroupName))
-            return new[] { api.GroupName };
-
-        // 3) Fallback
-        return new[] { "Endpoints" };
-    });
-
-});
+builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
@@ -48,8 +30,18 @@ app.MapDefaultEndpoints();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.MapOpenApi();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/openapi/v1.json", "Portfolio API V1");
+    });
+
+    app.UseReDoc(options =>
+    {
+        options.SpecUrl("/openapi/v1.json");
+    });
+
+    app.MapScalarApiReference();
 }
 
 app.MapCarter();

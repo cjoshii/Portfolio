@@ -2,6 +2,17 @@
 
   <ItemGroup>
     <ProjectReference Include="../Portfolio.Domain/Portfolio.Domain.csproj" />
+    <ProjectReference Include="../Portfolio.SharedKernel/Portfolio.SharedKernel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" />
+    <!-- <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" /> -->
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Abstractions/" />
+    <Folder Include="Abstractions/Messaging/" />
   </ItemGroup>
 
 </Project>

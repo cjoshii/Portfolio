@@ -1,8 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="../Portfolio.Application/Portfolio.Application.csproj" />
     <ProjectReference Include="../Portfolio.Domain/Portfolio.Domain.csproj" />
   </ItemGroup>
+
+
 
 </Project>

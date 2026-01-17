@@ -12,5 +12,6 @@
     <Project Path="Portfolio.Domain/Portfolio.Domain.csproj" />
     <Project Path="Portfolio.Infrastructure/Portfolio.Infrastructure.csproj" />
     <Project Path="Portfolio.ServiceDefaults/Portfolio.ServiceDefaults.csproj" />
+    <Project Path="Portfolio.SharedKernel/Portfolio.SharedKernel.csproj" />
   </Folder>
 </Solution>
