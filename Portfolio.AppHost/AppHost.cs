@@ -9,7 +9,7 @@ var portfolioDb = builder.AddPostgres("database")
     .WithPgAdmin()
     .AddDatabase("portfolio-db");
 
-builder.AddProject<Projects.Portfolio_Api>("api")
+builder.AddProject<Projects.Portfolio_Api>("portfolio-api")
        .WithReference(redis)
        .WaitFor(redis)
        .WithReference(portfolioDb)

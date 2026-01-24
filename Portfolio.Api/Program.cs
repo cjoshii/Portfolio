@@ -1,16 +1,20 @@
 using Carter;
-using Serilog;
-using Portfolio.Infrastructure.Data;
-using Scalar.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Portfolio.Api.Extensions;
 using Portfolio.Application;
+using Portfolio.Infrastructure.Data;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
-builder.Services.AddSerilog((services, loggerConfiguration) =>
+builder.Host.UseSerilog((ctx, services, cfg) =>
 {
-    loggerConfiguration.ReadFrom.Configuration(builder.Configuration);
+    cfg
+    .ReadFrom.Configuration(ctx.Configuration)
+    .ReadFrom.Services(services)
+    .Enrich.FromLogContext();
 });
 
 builder.AddNpgsqlDbContext<PortfolioDbContext>("portfolio-db");
@@ -21,27 +25,30 @@ builder.Services.AddCarter();
 
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddOpenApi();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+.AddJwtBearer(options =>
+{
+    // Example for Authority/Audience (OIDC provider like Auth0/Keycloak/Entra)
+    options.Authority = builder.Configuration["Auth:Authority"];
+    options.Audience = builder.Configuration["Auth:Audience"];
+
+    // If you’re using local JWT signing keys, config is different.
+});
+
+builder.Services.AddAuthorization();
+
+builder.Services.AddOpenApiWithAuth();
 
 var app = builder.Build();
+
+app.UseRequestContextLogging();
 
 app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/openapi/v1.json", "Portfolio API V1");
-    });
-
-    app.UseReDoc(options =>
-    {
-        options.SpecUrl("/openapi/v1.json");
-    });
-
-    app.MapScalarApiReference();
+    app.UseSwaggerWithUi();
 }
 
 app.MapCarter();
@@ -49,5 +56,9 @@ app.MapCarter();
 app.UseHttpsRedirection();
 
 app.UseSerilogRequestLogging();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.Run();
