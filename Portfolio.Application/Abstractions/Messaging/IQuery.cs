@@ -1,5 +1,5 @@
 using MediatR;
-using Portfolio.SharedKernel;
+using Portfolio.SharedKernel.Result;
 
 namespace Portfolio.Application.Abstractions.Messaging;
 

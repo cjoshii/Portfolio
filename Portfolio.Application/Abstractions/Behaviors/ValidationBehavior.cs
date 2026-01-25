@@ -2,7 +2,7 @@ using System.Reflection;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
-using Portfolio.SharedKernel;
+using Portfolio.SharedKernel.Result;
 
 namespace Portfolio.Application.Abstractions.Behaviors;
 
@@ -16,34 +16,35 @@ public sealed class ValidationBehavior<TRequest, TResponse>(
         RequestHandlerDelegate<TResponse> next,
         CancellationToken ct)
     {
-      var validationFailures = await ValidateAsync(request, validators);
+        var validationFailures = await ValidateAsync(request, validators);
 
         if (validationFailures.Length == 0)
         {
             return await next(ct);
         }
 
-        
-        if (typeof(TResponse).IsGenericType && typeof(TResponse).GetGenericTypeDefinition() == typeof(Result<>))
+        if (typeof(TResponse).IsGenericType
+        && typeof(TResponse).GetGenericTypeDefinition() == typeof(Result<>))
         {
             var resultType = typeof(TResponse).GetGenericArguments()[0];
             MethodInfo? failureMethod = typeof(Result<>)
                 .MakeGenericType(resultType)
-                .GetMethod(nameof(Result<Object>.ValidationFailure));
+                .GetMethod(nameof(Result<object>.ValidationFailure));
 
-            if(failureMethod is not null)
+            if (failureMethod is not null)
             {
                 return (TResponse)failureMethod.Invoke(
                     null,
                     [CreateValidationError(validationFailures)])!;
             }
-        }else if(typeof(TResponse) == typeof(Result))
+        }
+        else if (typeof(TResponse) == typeof(Result))
         {
             return (TResponse)(object)Result.Failure(
                 CreateValidationError(validationFailures));
         }
 
-        throw new ValidationException(validationFailures); 
+        throw new ValidationException(validationFailures);
     }
 
     private static async Task<ValidationFailure[]> ValidateAsync(

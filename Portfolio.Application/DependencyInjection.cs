@@ -1,5 +1,5 @@
 using FluentValidation;
-using MediatR;
+using Mapster;
 using Microsoft.Extensions.DependencyInjection;
 using Portfolio.Application.Abstractions.Behaviors;
 
@@ -9,7 +9,6 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-
         var assembly = typeof(DependencyInjection).Assembly;
 
         services.AddMediatR(cfg =>
@@ -20,6 +19,7 @@ public static class DependencyInjection
         });
 
         services.AddValidatorsFromAssembly(assembly, includeInternalTypes: true);
+        services.AddMapster();
         return services;
     }
 }

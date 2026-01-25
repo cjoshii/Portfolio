@@ -1,5 +1,3 @@
-using System;
-
 namespace Portfolio.Api.Modules;
 
 public static class ApiRoutes

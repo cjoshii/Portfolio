@@ -1,4 +1,4 @@
-﻿namespace Portfolio.SharedKernel;
+﻿namespace Portfolio.SharedKernel.Result;
 
 public enum ErrorType
 {

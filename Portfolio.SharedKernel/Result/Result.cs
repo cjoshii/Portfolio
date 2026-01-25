@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace Portfolio.SharedKernel;
+namespace Portfolio.SharedKernel.Result;
 
 public class Result
 {
@@ -33,15 +33,9 @@ public class Result
         new(default, false, error);
 }
 
-public class Result<TValue> : Result
+public class Result<TValue>(TValue? value, bool isSuccess, Error error) : Result(isSuccess, error)
 {
-    private readonly TValue? _value;
-
-    public Result(TValue? value, bool isSuccess, Error error)
-        : base(isSuccess, error)
-    {
-        _value = value;
-    }
+    private readonly TValue? _value = value;
 
     [NotNull]
     public TValue Value => IsSuccess
@@ -52,5 +46,5 @@ public class Result<TValue> : Result
         value is not null ? Success(value) : Failure<TValue>(Error.NullValue);
 
     public static Result<TValue> ValidationFailure(Error error) =>
-        new(default, false, error);
+        Failure<TValue>(error);
 }

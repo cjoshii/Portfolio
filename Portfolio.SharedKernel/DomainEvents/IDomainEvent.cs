@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Portfolio.SharedKernel;
+namespace Portfolio.SharedKernel.DomainEvents;
 
 public interface IDomainEvent : INotification
 {

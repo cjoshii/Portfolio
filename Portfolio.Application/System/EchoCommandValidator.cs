@@ -6,6 +6,7 @@ public class EchoCommandValidator : AbstractValidator<EchoCommand>
 {
     public EchoCommandValidator()
     {
-        RuleFor(x => x.Arg).NotEmpty().MaximumLength(100).MinimumLength(1).NotNull();
+        RuleFor(x => x.Message).NotEmpty().WithMessage("Message must not be empty.")
+        .MaximumLength(20).WithMessage("Message cannot exceed 20 characters.");
     }
 }

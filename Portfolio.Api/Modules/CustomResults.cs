@@ -1,4 +1,4 @@
-﻿using Portfolio.SharedKernel;
+﻿using Portfolio.SharedKernel.Result;
 
 namespace Portfolio.Api.Modules;
 

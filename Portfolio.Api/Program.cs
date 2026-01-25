@@ -19,7 +19,7 @@ builder.Host.UseSerilog((ctx, services, cfg) =>
 
 builder.AddNpgsqlDbContext<PortfolioDbContext>("portfolio-db");
 
-builder.Services.AddApplication();
+builder.Services.AddMapper();
 
 builder.Services.AddCarter();
 
@@ -38,6 +38,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 
 builder.Services.AddOpenApiWithAuth();
+
+builder.Services.AddApplication();
 
 var app = builder.Build();
 
