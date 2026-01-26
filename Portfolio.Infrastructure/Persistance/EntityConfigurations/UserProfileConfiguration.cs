@@ -45,14 +45,16 @@ public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
             .IsRequired();
 
         builder
+            .Property(profile => profile.Country)
+            .HasMaxLength(2);
+
+        builder
             .Property(profile => profile.Locale)
-            .HasMaxLength(20)
-            .IsRequired();
+            .HasMaxLength(20);
 
         builder
             .Property(profile => profile.TimeZone)
-            .HasMaxLength(64)
-            .IsRequired();
+            .HasMaxLength(64);
 
         builder.HasIndex("_userId").IsUnique().HasDatabaseName("IX_UserProfile_UserId");
         builder.HasIndex(profile => new { profile.FirstName }).HasDatabaseName("IX_UserProfile_FirstName");

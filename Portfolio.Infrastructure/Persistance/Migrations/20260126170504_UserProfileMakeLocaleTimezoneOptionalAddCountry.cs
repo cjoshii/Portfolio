@@ -1,0 +1,29 @@
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace Portfolio.Infrastructure.Persistance.Migrations
+{
+    /// <inheritdoc />
+    public partial class UserProfileMakeLocaleTimezoneOptionalAddCountry : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.AddColumn<string>(
+                name: "Country",
+                table: "UserProfiles",
+                type: "character varying(2)",
+                maxLength: 2,
+                nullable: true);
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropColumn(
+                name: "Country",
+                table: "UserProfiles");
+        }
+    }
+}

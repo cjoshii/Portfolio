@@ -10,8 +10,9 @@ public sealed class UserProfile : AuditableEntity<UserProfileId>
     public string FirstName { get; private set; } = string.Empty;
     public string LastName { get; private set; } = string.Empty;
     public DateTime DateOfBirth { get; private set; }
-    public string Locale { get; private set; } = string.Empty;
-    public string TimeZone { get; private set; } = string.Empty;
+    public string? Country { get; private set; }
+    public string Locale { get; private set; } = "en-US";
+    public string TimeZone { get; private set; } = "UTC";
 
     private UserProfile()
         : base(new UserProfileId(Guid.Empty))
@@ -20,8 +21,9 @@ public sealed class UserProfile : AuditableEntity<UserProfileId>
         FirstName = string.Empty;
         LastName = string.Empty;
         DateOfBirth = default;
-        Locale = string.Empty;
-        TimeZone = string.Empty;
+        Country = null;
+        Locale = "en-US";
+        TimeZone = "UTC";
     }
 
     public UserProfile(
@@ -30,13 +32,15 @@ public sealed class UserProfile : AuditableEntity<UserProfileId>
         string firstName,
         string lastName,
         DateTime dateOfBirth,
-        string locale,
-        string timeZone)
+        string? country,
+        string? locale,
+        string? timeZone)
         : base(id)
     {
         _userId = userId.Value;
         SetName(firstName, lastName);
         SetDateOfBirth(dateOfBirth);
+        SetCountry(country);
         SetLocale(locale);
         SetTimeZone(timeZone);
     }
@@ -51,12 +55,17 @@ public sealed class UserProfile : AuditableEntity<UserProfileId>
         SetDateOfBirth(dateOfBirth);
     }
 
-    public void UpdateLocale(string locale)
+    public void UpdateCountry(string? country)
+    {
+        SetCountry(country);
+    }
+
+    public void UpdateLocale(string? locale)
     {
         SetLocale(locale);
     }
 
-    public void UpdateTimeZone(string timeZone)
+    public void UpdateTimeZone(string? timeZone)
     {
         SetTimeZone(timeZone);
     }
@@ -87,21 +96,34 @@ public sealed class UserProfile : AuditableEntity<UserProfileId>
         DateOfBirth = dateOfBirth;
     }
 
-    private void SetLocale(string locale)
+    private void SetCountry(string? country)
+    {
+        if (string.IsNullOrWhiteSpace(country))
+        {
+            Country = null;
+            return;
+        }
+
+        Country = country.Trim().ToUpperInvariant();
+    }
+
+    private void SetLocale(string? locale)
     {
         if (string.IsNullOrWhiteSpace(locale))
         {
-            throw new ArgumentException("Locale is required.", nameof(locale));
+            Locale = "en-US";
+            return;
         }
 
         Locale = locale.Trim();
     }
 
-    private void SetTimeZone(string timeZone)
+    private void SetTimeZone(string? timeZone)
     {
         if (string.IsNullOrWhiteSpace(timeZone))
         {
-            throw new ArgumentException("Time zone is required.", nameof(timeZone));
+            TimeZone = "UTC";
+            return;
         }
 
         TimeZone = timeZone.Trim();
