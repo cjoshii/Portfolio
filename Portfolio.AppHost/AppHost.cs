@@ -1,8 +1,11 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-var redis = builder.AddRedis("redis");
+var redis = builder.AddRedis("redis")
+    .WithLifetime(ContainerLifetime.Persistent)
+    .WithHostPort(6379)
+    .WithDataVolume();
 
-var portfolioDb = builder.AddPostgres("database")
+var database = builder.AddPostgres("database")
     .WithLifetime(ContainerLifetime.Persistent)
     .WithHostPort(5432)
     .WithDataVolume()
@@ -12,7 +15,7 @@ var portfolioDb = builder.AddPostgres("database")
 builder.AddProject<Projects.Portfolio_Api>("portfolio-api")
        .WithReference(redis)
        .WaitFor(redis)
-       .WithReference(portfolioDb)
-       .WaitFor(portfolioDb);
+       .WithReference(database)
+       .WaitFor(database);
 
 builder.Build().Run();

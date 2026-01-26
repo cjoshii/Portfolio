@@ -3,7 +3,7 @@ namespace Portfolio.SharedKernel.Entities;
 public abstract class AuditableEntity<TEntityId> : Entity<TEntityId>, IAuditableEntity
 where TEntityId : class
 {
-    protected AuditableEntity(TEntityId id) : base(id)
+    public AuditableEntity(TEntityId id) : base(id)
     {
     }
     public string? CreatedBy { get; set; }

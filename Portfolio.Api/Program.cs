@@ -2,7 +2,7 @@ using Carter;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Portfolio.Api.Extensions;
 using Portfolio.Application;
-using Portfolio.Infrastructure.Data;
+using Portfolio.Infrastructure;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,7 +17,9 @@ builder.Host.UseSerilog((ctx, services, cfg) =>
     .Enrich.FromLogContext();
 });
 
-builder.AddNpgsqlDbContext<PortfolioDbContext>("portfolio-db");
+builder.AddInfrastructure();
+
+builder.Services.ConfigureSettingsOptions();
 
 builder.Services.AddMapper();
 
@@ -25,15 +27,9 @@ builder.Services.AddCarter();
 
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-.AddJwtBearer(options =>
-{
-    // Example for Authority/Audience (OIDC provider like Auth0/Keycloak/Entra)
-    options.Authority = builder.Configuration["Auth:Authority"];
-    options.Audience = builder.Configuration["Auth:Audience"];
-
-    // If you’re using local JWT signing keys, config is different.
-});
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer();
 
 builder.Services.AddAuthorization();
 
