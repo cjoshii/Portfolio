@@ -13,6 +13,10 @@ public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
             profileId => profileId.Value,
             value => new UserProfileId(value));
 
+        var userIdNullableConverter = new ValueConverter<UserId?, Guid?>(
+            userId => userId == null ? null : userId.Value,
+            value => value == null ? null : new UserId(value.Value));
+
         builder.HasKey(profile => profile.Id);
 
         builder
@@ -40,8 +44,17 @@ public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
             .HasMaxLength(100)
             .IsRequired();
 
+        builder
+            .Property(profile => profile.CreatedBy)
+            .HasConversion(userIdNullableConverter);
+
+        builder
+            .Property(profile => profile.UpdatedBy)
+            .HasConversion(userIdNullableConverter);
+
         builder.
             Property(profile => profile.DateOfBirth)
+            .HasColumnType("date")
             .IsRequired();
 
         builder

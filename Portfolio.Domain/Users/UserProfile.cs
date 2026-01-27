@@ -2,14 +2,14 @@ using Portfolio.SharedKernel.Entities;
 
 namespace Portfolio.Domain.Users;
 
-public sealed class UserProfile : AuditableEntity<UserProfileId>
+public sealed class UserProfile : AuditableEntity<UserProfileId, UserId>
 {
     private Guid _userId;
 
     public UserId UserId => new(_userId);
     public string FirstName { get; private set; } = string.Empty;
     public string LastName { get; private set; } = string.Empty;
-    public DateTime DateOfBirth { get; private set; }
+    public DateOnly DateOfBirth { get; private set; }
     public string? Country { get; private set; }
     public string Locale { get; private set; } = "en-US";
     public string TimeZone { get; private set; } = "UTC";
@@ -31,7 +31,7 @@ public sealed class UserProfile : AuditableEntity<UserProfileId>
         UserId userId,
         string firstName,
         string lastName,
-        DateTime dateOfBirth,
+        DateOnly dateOfBirth,
         string? country,
         string? locale,
         string? timeZone)
@@ -50,7 +50,7 @@ public sealed class UserProfile : AuditableEntity<UserProfileId>
         SetName(firstName, lastName);
     }
 
-    public void UpdateDateOfBirth(DateTime dateOfBirth)
+    public void UpdateDateOfBirth(DateOnly dateOfBirth)
     {
         SetDateOfBirth(dateOfBirth);
     }
@@ -86,7 +86,7 @@ public sealed class UserProfile : AuditableEntity<UserProfileId>
         LastName = lastName.Trim();
     }
 
-    private void SetDateOfBirth(DateTime dateOfBirth)
+    private void SetDateOfBirth(DateOnly dateOfBirth)
     {
         if (dateOfBirth == default)
         {

@@ -1,13 +1,13 @@
 namespace Portfolio.SharedKernel.Entities;
 
-public abstract class AuditableEntity<TEntityId> : Entity<TEntityId>, IAuditableEntity
+public abstract class AuditableEntity<TEntityId, TUserId> : Entity<TEntityId>, IAuditableEntity<TUserId>
 where TEntityId : class
 {
     public AuditableEntity(TEntityId id) : base(id)
     {
     }
-    public string? CreatedBy { get; set; }
-    public DateTime? CreatedAt { get; set; }
-    public string? UpdatedBy { get; set; }
-    public DateTime? UpdatedAt { get; set; }
+    public TUserId? CreatedBy { get; set; }
+    public DateTimeOffset? CreatedAt { get; set; }
+    public TUserId? UpdatedBy { get; set; }
+    public DateTimeOffset? UpdatedAt { get; set; }
 }

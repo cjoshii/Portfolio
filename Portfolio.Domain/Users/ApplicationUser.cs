@@ -4,7 +4,7 @@ using Portfolio.SharedKernel.Entities;
 
 namespace Portfolio.Domain.Users;
 
-public sealed class ApplicationUser : IdentityUser<Guid>, IAuditableEntity
+public sealed class ApplicationUser : IdentityUser<Guid>, IAuditableEntity<UserId>
 {
     private readonly List<IDomainEvent> _domainEvents = [];
 
@@ -13,10 +13,10 @@ public sealed class ApplicationUser : IdentityUser<Guid>, IAuditableEntity
         Id = Guid.NewGuid();
     }
 
-    public string? CreatedBy { get; set; }
-    public DateTime? CreatedAt { get; set; }
-    public string? UpdatedBy { get; set; }
-    public DateTime? UpdatedAt { get; set; }
+    public UserId? CreatedBy { get; set; }
+    public DateTimeOffset? CreatedAt { get; set; }
+    public UserId? UpdatedBy { get; set; }
+    public DateTimeOffset? UpdatedAt { get; set; }
 
     public IReadOnlyCollection<IDomainEvent> GetDomainEvents => [.. _domainEvents];
 
