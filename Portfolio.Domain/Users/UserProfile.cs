@@ -1,5 +1,3 @@
-using Portfolio.SharedKernel.Entities;
-
 namespace Portfolio.Domain.Users;
 
 public sealed class UserProfile : AuditableEntity<UserProfileId, UserId>

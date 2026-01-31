@@ -69,8 +69,8 @@ public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
             .Property(profile => profile.TimeZone)
             .HasMaxLength(64);
 
-        builder.HasIndex("_userId").IsUnique().HasDatabaseName("IX_UserProfile_UserId");
-        builder.HasIndex(profile => new { profile.FirstName }).HasDatabaseName("IX_UserProfile_FirstName");
-        builder.HasIndex(profile => new { profile.LastName }).HasDatabaseName("IX_UserProfile_LastName");
+        builder.HasIndex("_userId").IsUnique();
+        builder.HasIndex(profile => new { profile.FirstName });
+        builder.HasIndex(profile => new { profile.LastName });
     }
 }

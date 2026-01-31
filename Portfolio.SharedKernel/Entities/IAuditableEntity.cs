@@ -1,6 +1,6 @@
 namespace Portfolio.SharedKernel.Entities;
 
-public interface IAuditableEntity<TUserId> : IEntity
+public interface IAuditableEntity<TUserId>
 {
     TUserId? CreatedBy { get; set; }
     DateTimeOffset? CreatedAt { get; set; }
